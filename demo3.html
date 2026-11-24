@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8f2">
+  <title>KindBridge — Care starts with sharing</title>
+  <style>
+    :root {
+      --ink: #20342c;
+      --muted: #68766f;
+      --green: #277653;
+      --green-dark: #18563d;
+      --mint: #eaf4ec;
+      --cream: #f7f8f2;
+      --white: #fff;
+      --line: #e3e9e2;
+      --gold: #f4c86e;
+      --coral: #e77a61;
+      --shadow: 0 15px 40px rgba(32, 52, 44, .10);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--cream); line-height: 1.55; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+
+    .demo-banner {
+      padding: 8px 14px;
+      background: #fff0c8;
+      color: #59491d;
+      text-align: center;
+      font-size: .85rem;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      border-bottom: 1px solid var(--line);
+      background: rgba(247, 248, 242, .94);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      max-width: 1180px;
+      margin: auto;
+      padding: 13px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 850;
+      font-size: 1.18rem;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 39px;
+      height: 39px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: white;
+      background: var(--green);
+      font-size: 1.3rem;
+    }
+
+    .nav-links { display: flex; align-items: center; gap: 19px; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: .92rem; }
+    .nav-links a:hover { color: var(--green); }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 11px 16px;
+      border: 0;
+      border-radius: 11px;
+      background: var(--green);
+      color: white;
+      text-decoration: none;
+      font-weight: 750;
+      transition: transform .18s, background .18s, box-shadow .18s;
+    }
+
+    .button:hover { background: var(--green-dark); transform: translateY(-1px); box-shadow: 0 7px 18px #2776532b; }
+    .button.secondary { background: white; color: var(--green-dark); border: 1px solid var(--line); }
+    .button.secondary:hover { background: var(--mint); }
+    .button.light { background: #ffffff25; border: 1px solid #ffffff70; color: white; }
+    .button.small { padding: 9px 12px; font-size: .88rem; }
+    .button:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+
+    .hero {
+      max-width: 1180px;
+      margin: auto;
+      padding: 60px 22px 48px;
+      display: grid;
+      grid-template-columns: 1.04fr .96fr;
+      gap: 38px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 11px;
+      border-radius: 99px;
+      color: var(--green-dark);
+      background: var(--mint);
+      font-size: .82rem;
+      font-weight: 750;
+    }
+
+    h1 {
+      max-width: 680px;
+      margin: 17px 0;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: 1.04;
+      letter-spacing: -.05em;
+    }
+
+    .hero-copy { max-width: 590px; color: var(--muted); font-size: 1.1rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 23px; }
+
+    .hero-visual {
+      min-height: 380px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: end;
+      padding: 22px;
+      border-radius: 30px;
+      background:
+        linear-gradient(180deg, transparent 35%, rgba(22, 46, 34, .78)),
+        url("https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=1200&q=85") center 48% / cover;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-visual::before {
+      content: "📚";
+      position: absolute;
+      right: 24px;
+      top: 21px;
+      width: 65px;
+      height: 65px;
+      display: grid;
+      place-items: center;
+      border-radius: 22px;
+      background: #ffffffdf;
+      font-size: 1.8rem;
+    }
+
+    .hero-note {
+      position: relative;
+      max-width: 370px;
+      padding: 19px;
+      border: 1px solid #ffffff75;
+      border-radius: 18px;
+      color: white;
+      background: #ffffff20;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-note strong { display: block; font-size: 1.15rem; }
+    .hero-note span { color: #ffffffdf; font-size: .9rem; }
+
+    .trust-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    .trust-row span { display: inline-flex; gap: 6px; align-items: center; }
+
+    .section { max-width: 1180px; margin: auto; padding: 48px 22px 62px; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 22px; }
+    .section-head h2 { margin: 7px 0 0; font-size: clamp(1.75rem, 3vw, 2.45rem); letter-spacing: -.035em; }
+    .section-head p { max-width: 580px; margin: 7px 0 0; color: var(--muted); }
+
+    .urgent-wrap {
+      padding: 19px;
+      border-radius: 23px;
+      background: #fff2df;
+      border: 1px solid #f3e5cd;
+    }
+
+    .urgent-heading { display: flex; align-items: center; gap: 9px; margin: 0 0 14px; }
+    .urgent-heading h3 { margin: 0; font-size: 1.1rem; }
+
+    .urgent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .urgent-card { padding: 16px; border-radius: 15px; background: white; }
+    .urgent-card strong { display: block; margin: 5px 0; }
+    .urgent-card p { margin: 0; color: var(--muted); font-size: .88rem; }
+    .urgent-card .mini { font-size: 1.35rem; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 16px; }
+    .search { flex: 1 1 240px; position: relative; }
+    .search input, .controls select {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      outline: none;
+      background: white;
+      color: var(--ink);
+    }
+    .search input:focus, .controls select:focus, .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px #27765320;
+    }
+    .controls select { width: auto; min-width: 155px; }
+
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 20px; }
+    .filter {
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      color: var(--muted);
+      background: white;
+    }
+    .filter.active, .filter:hover { color: white; border-color: var(--green); background: var(--green); }
+
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+
+    .card {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: white;
+      box-shadow: 0 5px 18px #20342c0a;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .card-image { height: 165px; position: relative; background-size: cover; background-position: center; }
+    .badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 5px 9px;
+      border-radius: 99px;
+      color: var(--green-dark);
+      background: #ffffffeb;
+      font-size: .75rem;
+      font-weight: 800;
+    }
+    .card-content { padding: 17px; flex: 1; }
+    .card-content h3 { margin: 0 0 3px; font-size: 1.15rem; }
+    .location { color: var(--muted); font-size: .88rem; }
+    .card-content p { color: var(--muted); font-size: .91rem; }
+    .need-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 13px 0; }
+    .need-tag { padding: 5px 8px; border-radius: 7px; background: #f1f5f0; font-size: .77rem; }
+    .card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 17px 17px; }
+    .card-bottom .button { flex: 1; }
+    .wishlist-link { border: 0; background: transparent; color: var(--green); font-weight: 750; }
+
+    .how-section { background: #edf4ed; border-block: 1px solid var(--line); }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 22px; }
+    .step { padding: 20px; border: 1px solid #dfe9df; border-radius: 16px; background: #ffffffc9; }
+    .step-number { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--green); font-weight: 800; }
+    .step h3 { margin: 12px 0 5px; }
+    .step p { margin: 0; color: var(--muted); font-size: .92rem; }
+
+    .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .story-card {
+      min-height: 270px;
+      display: flex;
+      align-items: end;
+      padding: 22px;
+      border-radius: 21px;
+      color: white;
+      background:
+        linear-gradient(0deg, #193c2cdb, transparent 86%),
+        url("https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=1000&q=85") center / cover;
+    }
+    .story-card.second {
+      background:
+        linear-gradient(0deg, #193c2cdb, transparent 86%),
+        url("https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1000&q=85") center / cover;
+    }
+    .story-card h3 { margin: 0 0 5px; }
+    .story-card p { max-width: 420px; margin: 0; color: #ffffffdf; font-size: .92rem; }
+
+    .trust-panel { padding: 26px; border-radius: 22px; background: #203c31; color: white; }
+    .trust-panel p { max-width: 770px; color: #d7e4dc; }
+    .trust-points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; margin-top: 18px; }
+    .trust-point { padding: 14px; border: 1px solid #ffffff25; border-radius: 14px; background: #ffffff0c; }
+    .trust-point strong { display: block; }
+    .trust-point span { color: #d7e4dc; font-size: .86rem; }
+
+    details { padding: 15px 0; border-bottom: 1px solid var(--line); }
+    summary { cursor: pointer; font-weight: 750; }
+    details p { margin-bottom: 0; color: var(--muted); }
+
+    footer { padding: 30px 22px; color: var(--muted); background: #f0f2eb; font-size: .88rem; }
+    .footer-inner { max-width: 1180px; margin: auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 18px; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 16px; }
+    .footer-links a { color: var(--muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--green); }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: #14221c99;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      width: min(100%, 560px);
+      max-height: 92vh;
+      overflow: auto;
+      padding: 23px;
+      border-radius: 20px;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+    .modal-head { display: flex; justify-content: space-between; align-items: start; gap: 15px; }
+    .modal-head h2 { margin: 2px 0 0; }
+    .close { border: 0; color: var(--muted); background: transparent; font-size: 1.6rem; line-height: 1; }
+    .notice { margin: 14px 0; padding: 10px 12px; border-radius: 10px; color: #59491d; background: #fff4d8; font-size: .85rem; }
+    .field { margin: 13px 0; }
+    .field label { display: block; margin-bottom: 5px; font-size: .9rem; font-weight: 750; }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #d9e1d9;
+      border-radius: 10px;
+      color: var(--ink);
+      background: white;
+    }
+    .field textarea { min-height: 76px; resize: vertical; }
+    .hint { display: block; margin-top: 5px; color: var(--muted); font-size: .79rem; }
+    .modal-actions { display: flex; justify-content: end; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
+    .hidden { display: none !important; }
+    .status-track { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin: 17px 0; }
+    .status-step { padding: 10px 5px; border: 1px solid var(--line); border-radius: 10px; color: var(--muted); background: #f7f8f6; text-align: center; font-size: .8rem; }
+    .status-step.current, .status-step.done { color: var(--green-dark); border-color: #b6d9c2; background: var(--mint); font-weight: 750; }
+    .status-step span { display: block; font-size: 1.1rem; }
+
+    .tab-row { display: flex; gap: 8px; margin: 16px 0; }
+    .tab { flex: 1; padding: 9px; border: 1px solid var(--line); border-radius: 10px; background: white; color: var(--muted); }
+    .tab.active { border-color: var(--green); color: white; background: var(--green); }
+    .dashboard-box { padding: 16px; margin: 12px 0; border: 1px solid var(--line); border-radius: 13px; background: #fafbf8; }
+    .dashboard-box h3 { margin: 0 0 7px; }
+    .dashboard-box p { margin: 5px 0; color: var(--muted); }
+    .toast { position: fixed; right: 18px; bottom: 18px; z-index: 20; padding: 12px 16px; border-radius: 12px; color: white; background: #203c31; box-shadow: var(--shadow); }
+
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; padding-top: 42px; }
+      .hero-visual { min-height: 320px; }
+      .cards { grid-template-columns: repeat(2, 1fr); }
+      .nav-links a:not(.button) { display: none; }
+    }
+    @media (max-width: 580px) {
+      .nav { padding-inline: 15px; }
+      .nav-links { gap: 8px; }
+      .nav-links .button.secondary { display: none; }
+      .hero, .section { padding-inline: 16px; }
+      .cards, .steps, .urgent-grid, .story-grid, .trust-points { grid-template-columns: 1fr; }
+      .section-head { align-items: start; flex-direction: column; }
+      .hero-visual { min-height: 270px; }
+      .controls select { flex: 1; }
+      .modal { padding: 19px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-banner">
+    Demo only: sample institutions and requests. No real accounts, payments, or pickups.
+  </div>
+
+  <header>
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="#" aria-label="KindBridge home">
+        <span class="brand-mark" aria-hidden="true">♡</span>
+        <span>KindBridge</span>
+      </a>
+      <div class="nav-links">
+        <a href="#homes">Find a home</a>
+        <a href="#how">How it works</a>
+        <button class="button secondary small" type="button" onclick="openLogin()">Sign in</button>
+        <button class="button small" type="button" onclick="openDonation('Community Support Home')">Give support</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <span class="eyebrow">🌿 Thoughtful giving, made simple</span>
+        <h1>Share what matters. Support everyday care.</h1>
+        <p class="hero-copy">
+          Discover sample care-home needs and explore ways to support learning,
+          meals, clothing, and wellbeing—through a clear, community-minded experience.
+        </p>
+        <div class="hero-actions">
+          <a class="button" href="#homes">Explore care homes <span aria-hidden="true">→</span></a>
+          <button class="button secondary" type="button" onclick="openVolunteer()">Become a volunteer</button>
+        </div>
+        <div class="trust-row">
+          <span>✓ Clear needs</span>
+          <span>✓ Pickup tracking demo</span>
+          <span>✓ Child privacy focused</span>
+        </div>
+      </div>
+      <div class="hero-visual" role="img" aria-label="Books and learning materials">
+        <div class="hero-note">
+          <strong>Everyday items can support brighter days.</strong>
+          <span>Explore sample wishlists for books, food, clothing, and more.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="urgent-title">
+      <div class="urgent-wrap">
+        <div class="urgent-heading">
+          <span aria-hidden="true">⏰</span>
+          <h3 id="urgent-title">Highlighted sample needs</h3>
+        </div>
+        <div class="urgent-grid">
+          <article class="urgent-card">
+            <span class="mini" aria-hidden="true">📚</span>
+            <strong>School books & stationery</strong>
+            <p>Sample request · Sunrise Learning Home</p>
+          </article>
+          <article class="urgent-card">
+            <span class="mini" aria-hidden="true">🥫</span>
+            <strong>Packaged food supplies</strong>
+            <p>Sample request · Green Valley Children's Home</p>
+          </article>
+          <article class="urgent-card">
+            <span class="mini" aria-hidden="true">👕</span>
+            <strong>Everyday clothing</strong>
+            <p>Sample request · Hope Community House</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="homes">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Browse sample profiles</span>
+          <h2>Find a way to help</h2>
+          <p>Search fictional institutions and explore their sample needs. Real profiles would require verification before launch.</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <label class="search">
+          <span class="hidden">Search by institution or location</span>
+          <input id="search-input" type="search" placeholder="🔎 Search by home, city, or need">
+        </label>
+        <select id="city-filter" aria-label="Filter by city">
+          <option value="all">All sample cities</option>
+          <option value="Hyderabad">Hyderabad</option>
+          <option value="Pune">Pune</option>
+          <option value="Jaipur">Jaipur</option>
+        </select>
+      </div>
+
+      <div class="filters" role="group" aria-label="Filter by need">
+        <button class="filter active" data-filter="all" type="button">All needs</button>
+        <button class="filter" data-filter="Food" type="button">🥗 Food</button>
+        <button class="filter" data-filter="Education" type="button">📚 Education</button>
+        <button class="filter" data-filter="Clothing" type="button">👕 Clothing</button>
+        <button class="filter" data-filter="Supplies" type="button">🧼 Supplies</button>
+      </div>
+
+      <div class="cards" id="institution-cards"></div>
+      <p id="no-results" class="hidden">No sample profiles match those filters. Try another search.</p>
+    </section>
+
+    <section class="how-section" id="how">
+      <div class="section">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">A clear donor journey</span>
+            <h2>How it could work</h2>
+            <p>This prototype demonstrates the flow without collecting personal details or arranging real donations.</p>
+          </div>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <div class="step-number">1</div>
+            <h3>Choose a need</h3>
+            <p>Browse an institution profile and select money or useful supplies from its sample wishlist.</p>
+          </article>
+          <article class="step">
+            <div class="step-number">2</div>
+            <h3>Choose handover</h3>
+            <p>For goods, try a simulated pickup request or select delivery to the institution.</p>
+          </article>
+          <article class="step">
+            <div class="step-number">3</div>
+            <h3>Track the update</h3>
+            <p>See a demo request reference and move the pickup through pending, confirmed, and collected.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="stories">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Give with care</span>
+          <h2>Useful support, respectfully shown</h2>
+          <p>Use photos of supplies and community spaces rather than emotionally exploitative images or identifiable children.</p>
+        </div>
+      </div>
+      <div class="story-grid">
+        <article class="story-card">
+          <div>
+            <h3>Help learning feel within reach</h3>
+            <p>Books and stationery can be listed as specific, practical wishlist needs.</p>
+          </div>
+        </article>
+        <article class="story-card second">
+          <div>
+            <h3>Make essential supplies visible</h3>
+            <p>Clear item lists help donors understand what is useful and currently accepted.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="trust">
+      <div class="trust-panel">
+        <span class="eyebrow">Trust belongs at the center</span>
+        <h2>Designed around clarity and respect</h2>
+        <p>
+          Before a real launch, institutions, payments, pickup partners, and safeguarding
+          processes should be reviewed and verified. This demo uses fictional details only.
+        </p>
+        <div class="trust-points">
+          <div class="trust-point"><strong>🔐 Privacy</strong><span>Keep children’s identifying information private.</span></div>
+          <div class="trust-point"><strong>✅ Verification</strong><span>Show verification status clearly and honestly.</span></div>
+          <div class="trust-point"><strong>📊 Transparency</strong><span>Provide clear donation and delivery updates.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Help & information</span>
+          <h2>Frequently asked questions</h2>
+        </div>
+      </div>
+      <details>
+        <summary>Can I make a real donation through this demo?</summary>
+        <p>No. The payment and goods donation flows are simulations. No money or real donation request is sent.</p>
+      </details>
+      <details>
+        <summary>Are the listed care homes real?</summary>
+        <p>No. All names, locations, and needs shown here are fictional examples.</p>
+      </details>
+      <details>
+        <summary>Why are there no public child profiles?</summary>
+        <p>Children’s privacy and safety matter. A real platform should avoid publishing identifying details or images without appropriate consent and safeguards.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div><strong>KindBridge</strong> · Demo platform · No real donations accepted</div>
+      <div class="footer-links">
+        <a href="#trust">Trust & safety</a>
+        <a href="#faq">FAQs</a>
+        <a href="#homes">Browse sample homes</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal-backdrop" id="modal-backdrop" role="presentation" onclick="backdropClose(event)">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div id="modal-content"></div>
+    </section>
+  </div>
+
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script>
+    const homes = [
+      {
+        name: "Sunrise Learning Home",
+        city: "Hyderabad",
+        state: "Telangana",
+        description: "A fictional profile focused on learning materials and everyday essentials.",
+        needs: ["Education", "Food", "Books"],
+        image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=900&q=80",
+        icon: "📚",
+        wishlist: ["Storybooks", "Notebooks", "Pencils"]
+      },
+      {
+        name: "Green Valley Children's Home",
+        city: "Pune",
+        state: "Maharashtra",
+        description: "A sample profile with requests for meals, clothing, and wellbeing supplies.",
+        needs: ["Food", "Clothing", "Supplies"],
+        image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80",
+        icon: "🥗",
+        wishlist: ["Packaged staples", "Everyday clothing", "Hygiene supplies"]
+      },
+      {
+        name: "Hope Community House",
+        city: "Jaipur",
+        state: "Rajasthan",
+        description: "A fictional example showing school and community-care needs.",
+        needs: ["Education", "Clothing", "Supplies"],
+        image: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=900&q=80",
+        icon: "👕",
+        wishlist: ["School bags", "Clothing", "Art supplies"]
+      }
+    ];
+
+    const cards = document.getElementById("institution-cards");
+    const modalBackdrop = document.getElementById("modal-backdrop");
+    const modalContent = document.getElementById("modal-content");
+    let activeNeed = "all";
+    let pickupStatus = 0;
+    let toastTimer;
+
+    function renderHomes() {
+      const query = document.getElementById("search-input").value.trim().toLowerCase();
+      const city = document.getElementById("city-filter").value;
+      const filtered = homes.filter(home => {
+        const matchesNeed = activeNeed === "all" || home.needs.includes(activeNeed);
+        const matchesCity = city === "all" || home.city === city;
+        const searchable = `${home.name} ${home.city} ${home.state} ${home.needs.join(" ")} ${home.wishlist.join(" ")}`.toLowerCase();
+        return matchesNeed && matchesCity && searchable.includes(query);
+      });
+
+      cards.innerHTML = filtered.map((home, index) => `
+        <article class="card">
+          <div class="card-image" role="img" aria-label="Supplies relevant to ${home.name}" style="background-image:url('${home.image}')">
+            <span class="badge">Sample profile · Demo</span>
+          </div>
+          <div class="card-content">
+            <h3>${home.name}</h3>
+            <div class="location">📍 ${home.city}, ${home.state} · Fictional</div>
+            <p>${home.description}</p>
+            <strong>Sample wishlist</strong>
+            <div class="need-tags">${home.wishlist.map(item => `<span class="need-tag">${item}</span>`).join("")}</div>
+            <div class="need-tags">${home.needs.map(need => `<span class="need-tag">${need}</span>`).join("")}</div>
+          </div>
+          <div class="card-bottom">
+            <button class="button small" type="button" onclick="openDonation('${home.name}')">Choose how to help</button>
+            <button class="wishlist-link" type="button" aria-label="View wishlist for ${home.name}" onclick="showWishlist('${home.name}')">Wishlist</button>
+          </div>
+        </article>
+      `).join("");
+
+      document.getElementById("no-results").classList.toggle("hidden", filtered.length > 0);
+    }
+
+    document.getElementById("search-input").addEventListener("input", renderHomes);
+    document.getElementById("city-filter").addEventListener("change", renderHomes);
+    document.querySelectorAll(".filter").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelector(".filter.active")?.classList.remove("active");
+        button.classList.add("active");
+        activeNeed = button.dataset.filter;
+        renderHomes();
+      });
+    });
+
+    function showModal(content) {
+      modalContent.innerHTML = content;
+      modalBackdrop.classList.add("open");
+      modalContent.querySelector("button, input, select")?.focus();
+    }
+
+    function closeModal() {
+      modalBackdrop.classList.remove("open");
+      modalContent.innerHTML = "";
+    }
+
+    function backdropClose(event) {
+      if (event.target === modalBackdrop) closeModal();
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.remove("hidden");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.add("hidden"), 3000);
+    }
+
+    function showWishlist(homeName) {
+      const home = homes.find(item => item.name === homeName);
+      showModal(`
+        <div class="modal-head">
+          <div><span class="eyebrow">Sample wishlist</span><h2 id="modal-title">${home.name}</h2></div>
+          <button class="close" type="button" aria-label="Close" onclick="closeModal()">×</button>
+        </div>
+        <div class="notice">Fictional list for demo purposes. A real institution should confirm its needs and accepted items.</div>
+        <div class="dashboard-box">
+          <h3>Current sample needs</h3>
+          <p>${home.wishlist.map(item => `• ${item}`).join("<br>")}</p>
+          <p>Categories: ${home.needs.join(", ")}</p>
+        </div>
+        <div class="modal-actions"><button class="button" type="button" onclick="openDonation('${home.name}')">Support this wishlist</button></div>
+      `);
+    }
+
+    function openDonation(homeName) {
+      showModal(`
+        <div id="donation-form-view">
+          <div class="modal-head">
+            <div><span class="eyebrow">Demo donation</span><h2 id="modal-title">Support a care home</h2></div>
+            <button class="close" type="button" aria-label="Close" onclick="closeModal()">×</button>
+          </div>
+          <div class="notice">Demo only. Do not enter real payment details, phone numbers, or addresses.</div>
+          <form id="donation-form">
+            <div class="field"><label for="institution">Care home</label><input id="institution" value="${homeName}" readonly></div>
+            <div class="field">
+              <label for="donation-type">Choose support</label>
+              <select id="donation-type" onchange="toggleDonationFields()">
+                <option value="money">Money donation (simulated)</option>
+                <option value="goods">Donate goods (simulated pledge)</option>
+              </select>
+            </div>
+            <div id="money-fields">
+              <div class="field"><label for="amount">Demo amount</label>
+                <select id="amount"><option>₹250</option><option>₹500</option><option>₹1,000</option><option>Other demo amount</option></select>
+              </div>
+              <div class="field"><label><input id="recurring" type="checkbox" style="width:auto"> Make this a simulated monthly contribution</label></div>
+              <div class="notice">No payment gateway or real transaction is connected.</div>
+            </div>
+            <div id="goods-fields" class="hidden">
+              <div class="field"><label for="item">Item type</label>
+                <select id="item"><option>Food supplies</option><option>Books and stationery</option><option>Clothing</option><option>Hygiene supplies</option><option>Other useful items</option></select>
+              </div>
+              <div class="field"><label for="quantity">Approximate quantity</label>
+                <select id="quantity"><option>1 item or package</option><option>2–5 items or packages</option><option>6–10 items or packages</option><option>More than 10 items or packages</option></select>
+              </div>
+              <div class="field"><label for="handover">Handover method</label>
+                <select id="handover" onchange="togglePickupFields()"><option value="pickup">Request a pickup</option><option value="delivery">I can deliver to the institution</option></select>
+              </div>
+              <div id="pickup-fields">
+                <div class="field"><label for="pickup-area">Sample pickup area</label>
+                  <select id="pickup-area"><option>Hyderabad Central (demo)</option><option>Pune West (demo)</option><option>Jaipur Central (demo)</option></select>
+                  <span class="hint">Use sample areas only. No street address or phone number is requested.</span>
+                </div>
+                <div class="field"><label for="pickup-date">Preferred date</label><input id="pickup-date" type="date"></div>
+                <div class="field"><label for="pickup-time">Preferred time</label>
+                  <select id="pickup-time"><option>Morning, 9 AM–12 PM</option><option>Afternoon, 12 PM–4 PM</option><option>Evening, 4 PM–7 PM</option></select>
+                </div>
+              </div>
+              <div id="delivery-hint" class="notice hidden">Delivery is recorded only as a sample pledge; no real delivery is arranged.</div>
+            </div>
+            <div class="field"><label for="donor-note">Optional note</label><textarea id="donor-note" maxlength="160" placeholder="Demo text only"></textarea></div>
+            <div class="modal-actions">
+              <button class="button secondary" type="button" onclick="closeModal()">Cancel</button>
+              <button class="button" type="submit">Continue demo</button>
+            </div>
+          </form>
+        </div>
+        <div id="donation-success" class="hidden" aria-live="polite"></div>
+      `);
+
+      document.getElementById("donation-form").addEventListener("submit", finishDonation);
+    }
+
+    function toggleDonationFields() {
+      const goods = document.getElementById("donation-type").value === "goods";
+      document.getElementById("money-fields").classList.toggle("hidden", goods);
+      document.getElementById("goods-fields").classList.toggle("hidden", !goods);
+    }
+
+    function togglePickupFields() {
+      const pickup = document.getElementById("handover").value === "pickup";
+      document.getElementById("pickup-fields").classList.toggle("hidden", !pickup);
+      document.getElementById("delivery-hint").classList.toggle("hidden", pickup);
+    }
+
+    function finishDonation(event) {
+      event.preventDefault();
+      const homeName = document.getElementById("institution").value;
+      const isGoods = document.getElementById("donation-type").value === "goods";
+      const reference = "DEMO-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+      const pickup = isGoods && document.getElementById("handover").value === "pickup";
+      let message;
+
+      if (!isGoods) {
+        const amount = document.getElementById("amount").value;
+        const recurring = document.getElementById("recurring").checked ? " simulated monthly" : "";
+        message = `Your${recurring} ${amount} contribution to ${homeName} is recorded for this demo.`;
+      } else {
+        const item = document.getElementById("item").value;
+        const quantity = document.getElementById("quantity").value;
+        message = pickup
+          ? `Your simulated pledge of ${quantity} of ${item} to ${homeName} has a pickup request.`
+          : `Your simulated pledge of ${quantity} of ${item} to ${homeName} is recorded as a delivery plan.`;
+      }
+
+      document.getElementById("donation-form-view").classList.add("hidden");
+      const success = document.getElementById("donation-success");
+      success.classList.remove("hidden");
+      success.innerHTML = `
+        <div class="modal-head">
+          <div><span class="eyebrow">Demo complete</span><h2 id="modal-title">Thank you for trying it!</h2></div>
+          <button class="close" type="button" aria-label="Close" onclick="closeModal()">×</button>
+        </div>
+        <p>${message}</p>
+        <p><strong>Demo reference:</strong> ${reference}</p>
+        ${pickup ? `
+          <h3>Pickup status</h3>
+          <div class="status-track" id="status-track">
+            <div class="status-step current"><span>🕓</span>Pending</div>
+            <div class="status-step"><span>📅</span>Confirmed</div>
+            <div class="status-step"><span>✅</span>Collected</div>
+          </div>
+          <button class="button secondary" id="advance-status" type="button" onclick="advancePickup()">Simulate next update</button>
+        ` : ""}
+        <div class="notice">No payment was made and no real pickup request was sent.</div>
+        <div class="modal-actions"><button class="button" type="button" onclick="closeModal()">Done</button></div>
+      `;
+      pickupStatus = 0;
+    }
+
+    function advancePickup() {
+      const steps = document.querySelectorAll("#status-track .status-step");
+      if (pickupStatus < steps.length - 1) pickupStatus++;
+      steps.forEach((step, index) => {
+        step.classList.toggle("done", index < pickupStatus);
+        step.classList.toggle("current", index === pickupStatus);
+      });
+      const button = document.getElementById("advance-status");
+      if (pickupStatus === steps.length - 1) {
+        button.textContent = "Pickup marked collected";
+        button.disabled = true;
+      }
+    }
+
+    function openLogin() {
+      showModal(`
+        <div class="modal-head">
+          <div><span class="eyebrow">Demo access</span><h2 id="modal-title">Choose your view</h2></div>
+          <button class="close" type="button" aria-label="Close" onclick="closeModal()">×</button>
+        </div>
+        <div class="notice">This prototype does not create accounts or store credentials. Please do not enter a real password.</div>
+        <div class="tab-row">
+          <button class="tab active" id="donor-tab" type="button" onclick="setLoginTab('donor')">Donor</button>
+          <button class="tab" id="institution-tab" type="button" onclick="setLoginTab('institution')">Institution</button>
+        </div>
+        <div id="login-description">Preview a donor dashboard with sample donation and pickup activity.</div>
+        <div class="field"><label for="demo-email">Demo email</label><input id="demo-email" type="email" placeholder="demo@example.com"></div>
+        <div class="modal-actions">
+          <button class="button" type="button" onclick="openDashboard('donor')">Preview donor dashboard</button>
+          <button class="button secondary" type="button" onclick="openDashboard('institution')">Preview institution dashboard</button>
+        </div>
+      `);
+    }
+
+    function setLoginTab(role) {
+      document.getElementById("donor-tab").classList.toggle("active", role === "donor");
+      document.getElementById("institution-tab").classList.toggle("active", role === "institution");
+      document.getElementById("login-description").textContent = role === "donor"
+        ? "Preview a donor dashboard with sample donation and pickup activity."
+        : "Preview an institution dashboard for sample needs and requests.";
+    }
+
+    function openDashboard(role) {
+      if (role === "donor") {
+        showModal(`
+          <div class="modal-head"><div><span class="eyebrow">Sample dashboard</span><h2 id="modal-title">Donor overview</h2></div><button class="close" aria-label="Close" onclick="closeModal()">×</button></div>
+          <div class="notice">Fictional activity only. A real dashboard would show private account data after secure sign-in.</div>
+          <div class="dashboard-box"><h3>Recent activity</h3><p>📦 Books pledge · Sample Home · Pickup pending</p><p>💚 Monthly support · Demo contribution</p></div>
+          <div class="dashboard-box"><h3>Quick links</h3><p>Track a pickup · Browse wishlists · View demo receipts</p></div>
+          <div class="modal-actions"><button class="button" onclick="closeModal()">Done</button></div>
+        `);
+      } else {
+        showModal(`
+          <div class="modal-head"><div><span class="eyebrow">Sample dashboard</span><h2 id="modal-title">Institution overview</h2></div><button class="close" aria-label="Close" onclick="closeModal()">×</button></div>
+          <div class="notice">Fictional dashboard. Real institutions would need verification and secure access.</div>
+          <div class="dashboard-box"><h3>Sample needs</h3><p>📚 Notebooks · 20 requested</p><p>🥫 Packaged food · 10 requested</p></div>
+          <div class="dashboard-box"><h3>Sample pickup requests</h3><p>Request DEMO-102 · Pending review</p><p>Request DEMO-087 · Confirmed</p></div>
+          <div class="modal-actions"><button class="button" onclick="closeModal()">Done</button></div>
+        `);
+      }
+    }
+
+    function openVolunteer() {
+      showModal(`
+        <div class="modal-head"><div><span class="eyebrow">Community support</span><h2 id="modal-title">Volunteer interest</h2></div><button class="close" aria-label="Close" onclick="closeModal()">×</button></div>
+        <div class="notice">Demo form only. Do not submit real contact details.</div>
+        <form onsubmit="event.preventDefault(); closeModal(); showToast('Demo volunteer interest recorded locally.')">
+          <div class="field"><label for="volunteer-role">How would you like to help?</label>
+            <select id="volunteer-role"><option>Help coordinate item collections</option><option>Help sort or pack supplies</option><option>Support community donation drives</option></select>
+          </div>
+          <div class="field"><label for="volunteer-area">Sample city</label>
+            <select id="volunteer-area"><option>Hyderabad (demo)</option><option>Pune (demo)</option><option>Jaipur (demo)</option></select>
+          </div>
+          <div class="modal-actions"><button class="button secondary" type="button" onclick="closeModal()">Cancel</button><button class="button">Submit demo</button></div>
+        </form>
+      `);
+    }
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeModal();
+    });
+
+    renderHomes();
+  </script>
+</body>
+</html>
